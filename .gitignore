@@ -1,3 +1,4 @@
 *.db
 private.py
 *.pyc
+__pycache__/
