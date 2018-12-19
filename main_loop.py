@@ -1,4 +1,4 @@
-from simple import scrape_it
+from scraper import scrape_it
 import settings
 import time
 import sys

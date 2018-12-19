@@ -39,7 +39,7 @@ session = Session()
 
 def scrape_it():
     # Scrape Craigslist for listings.
-    cl_h = CraigslistHousing(site=settings.CRAIGSLIST_SITE, area=settings.AREA, category=settings.CRAIGSLIST_HOUSING_SECTION,
+    cl_h = CraigslistHousing(site=settings.CRAIGSLIST_SITE, area='nvn', category=settings.CRAIGSLIST_HOUSING_SECTION,
                             filters={'min_price': settings.MIN_PRICE, 'max_price': settings.MAX_PRICE})
 
     results = []
