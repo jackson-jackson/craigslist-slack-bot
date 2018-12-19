@@ -12,3 +12,4 @@ def post_listing_to_slack(sc, listing):
         "chat.postMessage", channel=settings.SLACK_CHANNEL, text=desc,
         username='pybot', icon_emoji=':robot_face:'
     )
+
