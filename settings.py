@@ -1,4 +1,4 @@
-import os
+import private
 
 # The min and max rent you want to pay each month.
 MIN_PRICE = 2000
@@ -30,5 +30,4 @@ SLACK_CHANNEL = '#housing'
 
 # The token that allows us to connect to slack.
 # Should be put in private.py, or set as an environment variable.
-SLACK_TOKEN = os.getenv(
-    'SLACK_TOKEN', 'xoxp-506488927079-505635824741-506490320151-e915076bc57477c5a7d7b414ae1ad7fc')
+SLACK_TOKEN = private.SLACK_TOKEN
