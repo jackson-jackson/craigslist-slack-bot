@@ -55,11 +55,10 @@ for result in results:
             x = x+1
             break
     else:
-        good_listings.append(result)
         listing = session.query(Listing).filter_by(cl_id=result["id"]).first()
-
         # Don't store the listing if it already exists.
         if listing is None:
+            good_listings.append(result)
             listing = Listing(
                 cl_id=result['id'],
                 link=result['url'],
@@ -71,9 +70,10 @@ for result in results:
                 body=result['body']
             )
 
-            # Save the listing so we don't grab it again.
-            session.add(listing)
-            session.commit()
+
+        # Save the listing so we don't grab it again.
+        session.add(listing)
+        session.commit()
 print('{} listings contained excluded terms.'.format(x))
 
 # Create slack client.
