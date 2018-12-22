@@ -20,7 +20,8 @@ AREA = ['nvn']
 CRAIGSLIST_HOUSING_SECTION = 'apa'
 
 # Search body of post for these terms and do not include posts that contain them in our results.
-EXCLUDED_TERMS = ['no pets', 'furnished', 'cozy', 'shared laundry']
+EXCLUDED_TERMS = ['no pets', 'furnished', 'cozy',
+                  'shared laundry', 'Seven Peaks in Squamish']
 
 # Time between scrapes.
 SLEEP_INTERVAL = 20 * 60  # 20 minutes
