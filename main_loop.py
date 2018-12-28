@@ -17,7 +17,7 @@ if __name__ == "__main__":
             traceback.print_exc()
         else:
             print("{}: Successfully finished scraping housing".format(time.ctime()))
-        
+
         print("{}: Starting scrape cycle for whips".format(time.ctime()))
         try:
             scrape_whips()

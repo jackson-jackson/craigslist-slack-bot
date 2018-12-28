@@ -28,7 +28,7 @@ CRAIGSLIST_AUTO_SECTION = 'cta'
 HOUSING_EXCLUDED_TERMS = ['no pets', 'furnished', 'cozy']
 
 # Seach title for included terms
-WHIPS_INCLUDED_TERMS = 'Macan'
+WHIPS_INCLUDED_TERMS = ['Tesla']
 
 # Time between scrapes.
 SLEEP_INTERVAL = 20 * 60  # 20 minutes

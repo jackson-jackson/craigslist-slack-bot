@@ -63,17 +63,18 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
+
 def scrape_housing():
     # Scrape Craigslist for listings.
     cl_h = CraigslistHousing(site=settings.CRAIGSLIST_SITE, area='nvn', category=settings.CRAIGSLIST_HOUSING_SECTION,
-                            filters={'min_price': settings.MIN_PRICE_RENT, 'max_price': settings.MAX_PRICE_RENT})
+                             filters={'min_price': settings.MIN_PRICE_RENT, 'max_price': settings.MAX_PRICE_RENT})
 
     results = []
     for result in cl_h.get_results(sort_by='newest', geotagged=True, limit=20, include_details=True):
         results.append(result)
 
     # Filter scraped results for excluded terms.
-    good_listings = []    
+    good_listings = []
     x = 0
     for result in results:
         for term in private.EXCLUDED_TERMS:
@@ -81,7 +82,8 @@ def scrape_housing():
                 x = x+1
                 break
         else:
-            listing = session.query(Listing).filter_by(cl_id=result["id"]).first()
+            listing = session.query(Listing).filter_by(
+                cl_id=result["id"]).first()
             # Don't store the listing if it already exists.
             if listing is None:
                 good_listings.append(result)
@@ -99,7 +101,7 @@ def scrape_housing():
             # Save the listing so we don't grab it again.
             session.add(listing)
             session.commit()
-    print('{} listings contained excluded terms.'.format(x))
+    print('{}{} listings contained excluded terms.'.format(time.ctime(), x))
 
     # Create slack client.
     sc = SlackClient(settings.SLACK_TOKEN)
@@ -115,7 +117,7 @@ def scrape_whips():
                               filters={'min_price': settings.MIN_PRICE_WHIPS, 'max_price': settings.MAX_PRICE_WHIPS, 'query': 'Macan', 'search_titles': True})
 
     results = []
-    for result in cl_fs.get_results(sort_by='newest', limit=20, include_details=True):
+    for result in cl_fs.get_results(sort_by='newest', limit=5, include_details=True):
         results.append(result)
 
     # Filter scraped results for included terms.
@@ -130,7 +132,7 @@ def scrape_whips():
                 link=result['url'],
                 created=parse(result['datetime']),
                 name=result['name'],
-                price=result['price'],
+                price=result['price'],  # '{:,}'.format('price')
                 location=result['where'],
                 body=result['body'],
                 image=result['images'][0]
