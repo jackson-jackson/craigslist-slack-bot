@@ -79,7 +79,6 @@ def scrape_housing():
     for result in results:
         for term in private.EXCLUDED_TERMS:
             if term in result['body'].lower():
-                x += 1
                 break
         else:
             listing = session.query(Listing).filter_by(
@@ -97,11 +96,12 @@ def scrape_housing():
                     sqft=result['area'],
                     body=result['body']
                 )
+                x += 1
 
             # Save the listing so we don't grab it again.
             session.add(listing)
             session.commit()
-    print(f'{time.ctime()}: Found {x} listings that contained excluded terms.')
+    print(f'{time.ctime()}: Found {x} new listings that contained excluded terms.')
 
     # Create slack client.
     sc = SlackClient(settings.SLACK_TOKEN)

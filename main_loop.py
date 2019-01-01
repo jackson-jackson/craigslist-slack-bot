@@ -29,5 +29,5 @@ if __name__ == "__main__":
             traceback.print_exc()
         else:
             print(f"{time.ctime()}: Successfully finished scraping for whips.")
-            print(f"{time.ctime()}: Going to sleep for {settings.SLEEP_INTERVAL} minutes.\n")
+            print(f"{time.ctime()}: Going to sleep for {int(settings.SLEEP_INTERVAL / 60)} minutes.\n")
         time.sleep(settings.SLEEP_INTERVAL)
