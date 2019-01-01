@@ -12,6 +12,20 @@ If you want the newest features then you'll need to use the new Slack Apps API h
 
 Settings are in settings.py file. Configure your parameters here and then run the code.
 
+## Private settings
+
+You can (and should) create a file called private.py and store your Slack Token and any other senstive information in it. Reference it in your code by making sure your private file is imported to your settings file:
+
+```python
+import private
+```
+
+You can refer to it from now on as
+
+```
+private.SLACK_TOKEN or settings.SLACK_TOKEN
+```
+
 ## Running this code
 
 ```shell
