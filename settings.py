@@ -8,6 +8,9 @@ MAX_PRICE_RENT = 3000
 MIN_PRICE_WHIPS = 30000
 MAX_PRICE_WHIPS = 130000
 
+# Limit search number to.
+LIMIT = 20
+
 # The specific Craigslist site you want to search on.
 # For instance, https://sfbay.craigslist.org is SF and the Bay Area.
 CRAIGSLIST_SITE = 'vancouver'

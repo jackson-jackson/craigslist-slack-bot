@@ -70,7 +70,7 @@ def scrape_housing():
                              filters={'min_price': settings.MIN_PRICE_RENT, 'max_price': settings.MAX_PRICE_RENT})
 
     results = []
-    for result in cl_h.get_results(sort_by='newest', geotagged=True, limit=20, include_details=True):
+    for result in cl_h.get_results(sort_by='newest', geotagged=True, limit=settings.LIMIT, include_details=True):
         results.append(result)
 
     # Filter scraped results for excluded terms.
@@ -79,7 +79,7 @@ def scrape_housing():
     for result in results:
         for term in private.EXCLUDED_TERMS:
             if term in result['body'].lower():
-                x = x+1
+                x += 1
                 break
         else:
             listing = session.query(Listing).filter_by(
@@ -92,7 +92,7 @@ def scrape_housing():
                     link=result['url'],
                     created=parse(result['datetime']),
                     name=result['name'],
-                    price=result['price'],
+                    price=f"${format(float(result['price'][1:]), ',.0f')} CAD",
                     location=result['where'],
                     sqft=result['area'],
                     body=result['body']
@@ -101,7 +101,7 @@ def scrape_housing():
             # Save the listing so we don't grab it again.
             session.add(listing)
             session.commit()
-    print('{}{} listings contained excluded terms.'.format(time.ctime(), x))
+    print(f'{time.ctime()}: {x} listings contained excluded terms.')
 
     # Create slack client.
     sc = SlackClient(settings.SLACK_TOKEN)
@@ -112,39 +112,42 @@ def scrape_housing():
 
 
 def scrape_whips():
-    # Scrape Craigslist for listings.
+    # Scrape Craigslist for whips.
     cl_fs = CraigslistForSale(site=settings.CRAIGSLIST_SITE, area='van', category=settings.CRAIGSLIST_AUTO_SECTION,
-                              filters={'min_price': settings.MIN_PRICE_WHIPS, 'max_price': settings.MAX_PRICE_WHIPS, 'query': 'Macan', 'search_titles': True})
+                              filters={'min_price': settings.MIN_PRICE_WHIPS, 'max_price': settings.MAX_PRICE_WHIPS, 'query': settings.WHIPS_INCLUDED_TERMS, 'search_titles': True})
 
     results = []
-    for result in cl_fs.get_results(sort_by='newest', limit=5, include_details=True):
+    for result in cl_fs.get_results(sort_by='newest', limit=settings.LIMIT, include_details=True):
         results.append(result)
 
     # Filter scraped results for included terms.
-    listings = []
+    whips = []
+    included = 0
     for result in results:
-        listing = session.query(Whips).filter_by(cl_id=result['id']).first()
-        # Don't store the whip listing if it already exists.
-        if listing is None:
-            listings.append(result)
-            listing = Whips(
+        whip = session.query(Whips).filter_by(cl_id=result['id']).first()
+        # Don't store the whip whip if it already exists.
+        if whip is None:
+            whip = Whips(
                 cl_id=result['id'],
                 link=result['url'],
                 created=parse(result['datetime']),
                 name=result['name'],
-                price=result['price'],  # '{:,}'.format('price')
+                price=f"${format(float(result['price'][1:]), ',.0f')} CAD",
                 location=result['where'],
                 body=result['body'],
                 image=result['images'][0]
             )
+            included += 1
+            whips.append(result)
 
         # Save whip so we don't grab it again.
-        session.add(listing)
+        session.add(whip)
         session.commit()
+    print(f'{time.ctime()}: Found {included} new whips.')
 
     # Create slack client.
     sc = SlackClient(settings.SLACK_TOKEN)
 
     # Post each result to Slack.
-    for listing in listings:
-        post_whip_to_slack(sc, listing)
+    for whip in whips:
+        post_whip_to_slack(sc, whip)

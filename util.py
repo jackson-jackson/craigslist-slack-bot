@@ -1,6 +1,7 @@
 import settings
 import requests
 import json
+import scraper
 
 web_hook_url_whips = 'https://hooks.slack.com/services/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'
 
@@ -11,38 +12,29 @@ def post_listing_to_slack(sc, listing):
     :param sc: A slack client.
     :param listing: A record of the listing.
     """
-    desc = "{0} | {1} | {2}".format(
-        listing["price"], listing["name"], listing["url"])
+    desc = f"{listing['price']} | {listing['name']} | {listing['url']}"
     sc.api_call(
         "chat.postMessage", channel=settings.SLACK_CHANNEL_HOUSING, text=desc,
         username='pybot', icon_emoji=':robot_face:'
     )
 
 
-def post_whip_to_slack(sc, listing):
+def post_whip_to_slack(sc, whip):
     """
-    Posts the listing to slack.
+    Posts the whip to slack.
     :param sc: A slack client.
-    :param listing: A record of the listing.
+    :param whip: A record of the whip.
     """
-    # desc = "{0} | {1} | {2} | {3}".format(
-    #     listing['price'], listing['name'], listing['url'], 'image_url={}'.format(listing['images'][0]))
-    # sc.api_call(
-    #     "chat.postMessage", channel=settings.SLACK_CHANNEL_WHIPS, text=desc,
-    #     username='pybot', icon_emoji=':robot_face:'
-    # )
-    # img = listing['images'][0]
 
     slack_msg = {
         'attachments': [
             {
                 'fallback': 'This should be a picture of a car.',
                 'color': '#36a64f',
-                # TODO '{:,}'.format(listing['price'])
-                'title': '{} | {} |'.format(listing['price'], listing['name']),
-                'title_link': '{}'.format(listing['url']),
-                'image_url': listing['images'][0],
-                'thumb_url': listing['images'][0],
+                'title': f"{whip['price']} | {whip['name']} |",
+                'title_link': f"{whip['url']}",
+                'image_url': whip['images'][0],
+                'thumb_url': whip['images'][0],
                 "text": "Do you like this post?",
                 'actions': [
                     {

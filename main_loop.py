@@ -6,19 +6,19 @@ import traceback
 
 if __name__ == "__main__":
     while True:
-        print("{}: Starting scrape cycle for housing".format(time.ctime()))
+        print(f"{time.ctime()}: Starting scrape cycle for housing...")
         try:
             scrape_housing()
         except KeyboardInterrupt:
-            print("Exiting....")
+            print("Exiting...")
             sys.exit(1)
         except Exception as exc:
             print("Error with the scraping:", sys.exc_info()[0])
             traceback.print_exc()
         else:
-            print("{}: Successfully finished scraping housing".format(time.ctime()))
+            print(f"{time.ctime()}: Successfully finished scraping housing.")
 
-        print("{}: Starting scrape cycle for whips".format(time.ctime()))
+        print(f"{time.ctime()}: Starting scrape cycle for whips...")
         try:
             scrape_whips()
         except KeyboardInterrupt:
@@ -28,5 +28,6 @@ if __name__ == "__main__":
             print("Error with the scraping:", sys.exc_info()[0])
             traceback.print_exc()
         else:
-            print("{}: Successfully finished scraping for whips".format(time.ctime()))
+            print(f"{time.ctime()}: Successfully finished scraping for whips.")
+            print(f"{time.ctime()}: Going to sleep for {settings.SLEEP_INTERVAL} minutes.")
         time.sleep(settings.SLEEP_INTERVAL)
