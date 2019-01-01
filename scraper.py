@@ -101,7 +101,7 @@ def scrape_housing():
             # Save the listing so we don't grab it again.
             session.add(listing)
             session.commit()
-    print(f'{time.ctime()}: {x} listings contained excluded terms.')
+    print(f'{time.ctime()}: Found {x} listings that contained excluded terms.')
 
     # Create slack client.
     sc = SlackClient(settings.SLACK_TOKEN)
